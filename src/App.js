@@ -1,7 +1,9 @@
-import { render } from '@testing-library/react';
+
 import React,{Component} from 'react'
 import './App.css';
+import Radium,{StyleRoot} from 'radium';
 import Person from './Person/Person';
+import Textfiled from './components/Textfiled';
 
 
 
@@ -49,11 +51,17 @@ class App extends Component {
 
   render () {
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+
+     ':hover': {
+      backgroundColor: 'lightgreen',
+      color: 'black'
+
+     }
     };
 
     let persons = null;
@@ -69,21 +77,41 @@ class App extends Component {
               key={person.id}
               changed={(event) => this.nameChangedHandler(event, person.id)} />
           })}
+
         </div>
       );
+      style.backgroundColor='red';
+      style [':hover']= {
+        backgroundColor: 'lightred',
+        color: 'black'
+  
+       }
     }
 
+   
+     const classes = [];
+     if (this.state.persons.length <= 2){
+       classes.push('red');
+       if (this.state.persons.length<= 1){
+         classes.push('bold');
+       }
+     }
     return (
+      <StyleRoot> 
       <div className="App">
         <h1>Burger App</h1>
+        <p className={classes.join(' ')} >Let's order a Burger</p>
         <button
           style={style}
           onClick={this.togglePersonsHandler}>Toggle Persons</button>
         {persons}
+        <br/>
+        <Textfiled/>
       </div>
+      </StyleRoot>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
 }
 
-export default App;
+export default Radium(App);//This is called higer-order Component
